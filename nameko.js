@@ -13,6 +13,7 @@ var NamekoClient = function(options, cb, onError) {
     options = options || {};
     this._options = {
         host: options.host || '127.0.0.1',
+        vhost: options.vhost || '/',
         port: options.port || 5672,
         login : options.login || 'guest',
         password : options.password || 'guest',
@@ -32,6 +33,7 @@ var NamekoClient = function(options, cb, onError) {
 
     this._conn = amqp.createConnection({
         host: this._options.host,
+        vhost: this._options.vhost,
         port: this._options.port,
         login: this._options.login,
         password: this._options.password,
@@ -148,7 +150,7 @@ NamekoClient.prototype = {
                     exchange: self._options.exchange
                 },
                 function(a, b, c) {
-                    self.logger.debug('Publish:', a, b, c);
+                    logger.debug('Publish:', a, b, c);
                 }
             );
         });
@@ -166,7 +168,7 @@ NamekoClient.prototype = {
 
 NamekoClient.prototype.__proto__ = events.EventEmitter.prototype;
 
-var connect = function(options, cb, onError) {
+ connect = function(options, cb, onError) {
     if (cb) {
         return new NamekoClient(options, cb, onError);
     } else {
